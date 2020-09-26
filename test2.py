@@ -1,2 +1,0 @@
-print("testtatstasdtasdfasdfasdt")
-print("aosdfkasdf")
