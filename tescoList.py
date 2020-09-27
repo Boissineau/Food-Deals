@@ -1,0 +1,1 @@
+Tesco = ["https://www.tesco.com/groceries/en-GB/search?query=bread&icid=tescohp_sws-1_m-ft_in-bread_ab-226-b_out-bread","https://www.tesco.com/groceries/en-GB/search?query=margarine","https://www.tesco.com/groceries/en-GB/search?query=jam","https://www.tesco.com/groceries/en-GB/search?query=cereal","https://www.tesco.com/groceries/en-GB/search?query=milk"]

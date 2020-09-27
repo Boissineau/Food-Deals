@@ -1,0 +1,1 @@
+foodNames = ["Bread","Margarine","Jam","Cereal","Milk"]
