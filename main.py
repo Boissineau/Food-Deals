@@ -1,44 +1,45 @@
+import lxml
+from pandas.core.arrays.categorical import contains
 import requests
 from requests import get
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
-
-
 from requests.api import head
+from requests_html import HTMLSession
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
-headers = {"Accept-Language" : "en-US, en;q=0.5"} #translate the page into English
+url = 'https://www.tesco.com/groceries/en-GB/search?query=bread&icid=tescohp_sws-1_m-ft_in-bread_ab-226-b_out-bread'
 
-url = "YOURWEBSITEHERE" 
+browser_options = Options()
+browser_options.add_argument('--headless')
+browser_options.add_argument('--no-sandbox')
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'    
+browser_options.add_argument('user-agent={0}'.format(user_agent))
+# adding a user_agent gets passed the --headless access denied
 
-results = requests.get(url, headers=headers) # gets the contents of the page by requesting the URL
+browser = webdriver.Chrome(options=browser_options)
+browser.get(url)
+soup = BeautifulSoup(browser.page_source, features='lxml')
 
-soup = BeautifulSoup(results.text, "html.parser") #BeautifulSoup specifies the desired format of results using the HTML parser
+# soup_log = open('soup_log.txt', 'w')
+# print(soup.prettify(), file = soup_log)
 
+food_div = soup.find_all('div', class_='tile-content')
+# print(len(food_div))
 
+names = []
 
-#the following variables are the types of data we want to extract
-variables = []
-
-#each movie div container
-names = soup.findAll('TAG', class_='CLASSES') #finds all divs that have the class "xxxxx"
-
-
-for container in names:
-    name = container.h3.a.text #the name of the movie is inside the container > div > h3 > a > NAME (text)
+for container in food_div:
+    name = container.h3.a.text
     names.append(name)
     
 
-#dataframe with Pandas to break the data down into a nice table
-names = pd.DataFrame({
-
-    'name' : names,
-
-})
-
-#fixing variables and whatnot
-names['name'] = names['name'].str.extract('(\d+)').astype(int)
+for i in names:
+    print(i)
+    print('')
 
 
-
-names.to_csv('names.csv')
+# print(names)
