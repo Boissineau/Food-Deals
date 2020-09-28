@@ -35,7 +35,6 @@ while Count < len(Tesco):
     browser_options.add_argument("--disable-gpu")
     browser_options.add_argument("--disable-extensions")
     browser_options.add_argument("--no-proxy-server")
-    browser_options.add_argument("--no-proxy-server")
     user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
     browser_options.add_argument("user-agent={0}".format(user_agent))
     # adding a user_agent gets passed the --headless access denied
