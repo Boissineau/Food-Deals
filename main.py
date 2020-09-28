@@ -55,9 +55,9 @@ while Count < len(Tesco):
     redirects = []
 
     # log for checking w/e
-    log1 = open("names.txt", "w", encoding="utf-8")
-    log2 = open("prices.txt", "w", encoding="utf-8")
-    log3 = open("redirects.txt", "w", encoding="utf-8")
+    log1 = open("logging/names.txt", "w", encoding="utf-8")
+    log2 = open("logging/prices.txt", "w", encoding="utf-8")
+    log3 = open("logging/redirects.txt", "w", encoding="utf-8")
 
 
     # continues to search till no more next pages
@@ -80,9 +80,9 @@ while Count < len(Tesco):
             print(href + "\n", file=log3)
 
 
-        try:
+        if pagination_a["href"] is not None:
             a = pagination_a["href"]
-        except:
+        else:
             Count = Count + 1
             break
 
