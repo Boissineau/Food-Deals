@@ -29,8 +29,8 @@ while Count < len(Tesco):
 
     # intanitating browsers to use for scraping
     browser_options = Options()
-    #browser_options.add_argument("--headless")
-    #browser_options.add_argument("--no-sandbox")
+    browser_options.add_argument("--headless")
+    browser_options.add_argument("--no-sandbox")
     browser_options.add_argument("--incognito")
     user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
     browser_options.add_argument("user-agent={0}".format(user_agent))
@@ -52,10 +52,12 @@ while Count < len(Tesco):
     # variables
     names = []
     prices = []
-
+    redirects = []
 
     # log for checking w/e
-    log = open("log.txt", "w", encoding="utf-8")
+    log1 = open("logging/names.txt", "w", encoding="utf-8")
+    log2 = open("logging/prices.txt", "w", encoding="utf-8")
+    log3 = open("logging/redirects.txt", "w", encoding="utf-8")
 
 
     # continues to search till no more next pages
@@ -65,12 +67,28 @@ while Count < len(Tesco):
         for container in food_div:
             name = container.h3.a.text
             names.append(name)
-            print(name + "\n", file=log)
+            
+            
+            price = container.find('span', class_='value').text if container.find('span', class_='value') is not None else ''
+            prices.append(price)
+
+            href = container.h3.a['href'] if container.h3.a['href'] is not None else ''
+            redirects.append(base_url + href)
+
+            print(name + "\n", file=log1)
+            print(price + "\n", file=log2)
+            print(href + "\n", file=log3)
+
+    
+
         try:
-            a = pagination_a["href"]
+            a = pagination_a['href']
         except:
+            print(pagination_a)
             Count = Count + 1
             break
+
+
 
         # gets next page 
         new_url = pagination_a["href"]
@@ -82,6 +100,7 @@ while Count < len(Tesco):
         food_div = soup.find_all("div", class_="tile-content")
         pagination_a = soup.find("a", attrs={"name": "go-to-results-page"})
 
-
     stop = time.perf_counter()
     print(stop - start)
+   
+
