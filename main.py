@@ -79,12 +79,16 @@ while Count < len(Tesco):
             print(price + "\n", file=log2)
             print(href + "\n", file=log3)
 
+    
 
-        if pagination_a["href"] is not None:
-            a = pagination_a["href"]
-        else:
+        try:
+            a = pagination_a['href']
+        except:
+            print(pagination_a)
             Count = Count + 1
             break
+
+
 
         # gets next page 
         new_url = pagination_a["href"]
