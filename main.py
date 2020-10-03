@@ -23,34 +23,35 @@ start = time.perf_counter()
 # url's of pages to scrape from
 Count = 0
 base_url = "https://www.tesco.com"
+
+
+
+browser_options = Options()
+# browser_options.add_argument("--headless")
+# browser_options.add_argument("--no-sandbox")
+browser_options.add_argument("--incognito")
+browser_options.add_argument("--disable-gpu")
+browser_options.add_argument("--disable-extensions")
+browser_options.add_argument("--no-proxy-server")
+user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
+browser_options.add_argument("user-agent={0}".format(user_agent))
+
+browser = webdriver.Chrome(options=browser_options)
+browser2 = webdriver.Chrome(options=browser_options)
+
+
 while Count < len(Tesco):
     url = Tesco[Count]
     url2 = "https://groceries.morrisons.com/search?entry=bread"
 
     # intanitating browsers to use for scraping
-    browser_options = Options()
-    browser_options.add_argument("--headless")
-    browser_options.add_argument("--no-sandbox")
-    browser_options.add_argument("--incognito")
-    browser_options.add_argument("--disable-gpu")
-    browser_options.add_argument("--disable-extensions")
-    browser_options.add_argument("--no-proxy-server")
-    user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
-    browser_options.add_argument("user-agent={0}".format(user_agent))
     # adding a user_agent gets passed the --headless access denied
 
     # intial scrapes
-    browser = webdriver.Chrome(options=browser_options)
     browser.get(url)
     soup = BeautifulSoup(browser.page_source, features="lxml")
-
-    # browser2 = webdriver.Chrome(options=browser_options)
-    # browser2.get(url2)
-    # soup2 = BeautifulSoup(browser2.page_source, features="lxml")
-
-
-
-
+    browser2.get(url2)
+    soup2 = BeautifulSoup(browser2.page_source, features="lxml")
 
     soup_log = open('logging/soup_log.txt', 'w')
     print(soup2.prettify(), file = soup_log)
@@ -93,10 +94,10 @@ while Count < len(Tesco):
             # print(price + "\n", file=log2)
             # print(href + "\n", file=log3)
 
-        # for container in food_div2:
-        #     name = container.find('h4', class_='fop-title')['title']    if container.find('h4', class_='fop-title') is not None else ''
-        #     # description = container.find('div', class_='fop-description')
-        #     names2.append(name)
+        for container in food_div2:
+            name = container.find('h4', class_='fop-title')['title']    if container.find('h4', class_='fop-title') is not None else ''
+            # description = container.find('div', class_='fop-description')
+            names2.append(name)
 
 
     
