@@ -25,13 +25,16 @@ Count = 0
 base_url = "https://www.tesco.com"
 while Count < len(Tesco):
     url = Tesco[Count]
-
+    url2 = "https://groceries.morrisons.com/search?entry=bread"
 
     # intanitating browsers to use for scraping
     browser_options = Options()
     browser_options.add_argument("--headless")
     browser_options.add_argument("--no-sandbox")
     browser_options.add_argument("--incognito")
+    browser_options.add_argument("--disable-gpu")
+    browser_options.add_argument("--disable-extensions")
+    browser_options.add_argument("--no-proxy-server")
     user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
     browser_options.add_argument("user-agent={0}".format(user_agent))
     # adding a user_agent gets passed the --headless access denied
@@ -41,18 +44,33 @@ while Count < len(Tesco):
     browser.get(url)
     soup = BeautifulSoup(browser.page_source, features="lxml")
 
-    # soup_log = open('soup_log.txt', 'w')
-    # print(soup.prettify(), file = soup_log)
+    # browser2 = webdriver.Chrome(options=browser_options)
+    # browser2.get(url2)
+    # soup2 = BeautifulSoup(browser2.page_source, features="lxml")
 
-    # tags your scraper wants to look for
+
+
+
+
+    soup_log = open('logging/soup_log.txt', 'w')
+    print(soup2.prettify(), file = soup_log)
+
+    # tags your scraper wants to look for. I.E. The cotainer element, not the specific element. (The container surrounding the item not the specific price, name, link, etc...)
     food_div = soup.find_all("div", class_="tile-content")
     pagination_a = soup.find("a", attrs={"name": "go-to-results-page"})
+    food_div2 = soup2.find_all("li", class_="fops-item fops-item--cluster")
+
+
+
 
 
     # variables
     names = []
     prices = []
     redirects = []
+
+    names2 = []
+
 
     # log for checking w/e
     log1 = open("logging/names.txt", "w", encoding="utf-8")
@@ -67,20 +85,22 @@ while Count < len(Tesco):
         for container in food_div:
             name = container.h3.a.text
             names.append(name)
-            
-            
             price = container.find('span', class_='value').text if container.find('span', class_='value') is not None else ''
             prices.append(price)
-
             href = container.h3.a['href'] if container.h3.a['href'] is not None else ''
             redirects.append(base_url + href)
+            # print(name + "\n", file=log1)
+            # print(price + "\n", file=log2)
+            # print(href + "\n", file=log3)
 
-            print(name + "\n", file=log1)
-            print(price + "\n", file=log2)
-            print(href + "\n", file=log3)
+        # for container in food_div2:
+        #     name = container.find('h4', class_='fop-title')['title']    if container.find('h4', class_='fop-title') is not None else ''
+        #     # description = container.find('div', class_='fop-description')
+        #     names2.append(name)
+
 
     
-
+        # end of next pages
         try:
             a = pagination_a['href']
         except:
