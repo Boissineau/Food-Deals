@@ -9,6 +9,7 @@ import numpy as np
 from requests.api import head
 from requests_html import HTMLSession
 from selenium import webdriver
+from selenium.webdriver import ChromeOptions
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import time
@@ -24,11 +25,9 @@ start = time.perf_counter()
 Count = 0
 base_url = "https://www.tesco.com"
 
-
-
 browser_options = Options()
-# browser_options.add_argument("--headless")
-# browser_options.add_argument("--no-sandbox")
+browser_options.add_argument("--headless")
+browser_options.add_argument("--no-sandbox")
 browser_options.add_argument("--incognito")
 browser_options.add_argument("--disable-gpu")
 browser_options.add_argument("--disable-extensions")
@@ -96,6 +95,7 @@ while Count < len(Tesco):
 
         for container in food_div2:
             name = container.find('h4', class_='fop-title')['title']    if container.find('h4', class_='fop-title') is not None else ''
+            # name = container.find('div', class_='fop-description').h4.span.text
             # description = container.find('div', class_='fop-description')
             names2.append(name)
 
