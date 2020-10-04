@@ -35,42 +35,45 @@ browser_options.add_argument("--incognito")
 browser_options.add_argument("--disable-gpu")
 browser_options.add_argument("--disable-extensions")
 browser_options.add_argument("--no-proxy-server")
-user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
-browser_options.add_argument("user-agent={0}".format(user_agent))
+# user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
+# browser_options.add_argument("user-agent={0}".format(user_agent))
 
 
 browser2 = webdriver.Firefox(firefox_options=browser_options)
 
 
 while Count < len(Tesco):
-    url = Tesco[Count]
-    url2 = "https://groceries.morrisons.com/search?entry=bread"
-
-    browser2.get(url2)
-    sleep(10)
-    innerHTML = browser2.execute_script("return document.body.innerHTML")
-    morrisons_innerHtml = open('logging/morrisons_innerHtml.txt', 'w', encoding='utf-8')
-
-    soup2 = BeautifulSoup(innerHTML, "lxml")
-    print(soup2.prettify(), file=morrisons_innerHtml)
-
-
-    food_div2 = soup2.find_all("li", class_="fops-item--cluster")
-
-    # variables
-    names = []
-    prices = []
-    redirects = []
-
-    names2 = []
-
-
-    # log for checking w/e
-
-    morrisons_log = open('logging/morrisons_log.txt', 'w', encoding='utf-8')
-
-    # continues to search till no more next pages
     try: 
+        url = Tesco[Count]
+        url2 = "https://groceries.morrisons.com/search?entry=bread"
+
+        browser2.get(url2)
+        
+        WebDriverWait(browser2, 240).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'fops-item fops-item--cluster')))
+        # wait.until(EC.visibility_of_all_elements_located(By.)
+        # sleep(120)
+        innerHTML = browser2.execute_script("return document.body.innerHTML")
+        morrisons_innerHtml = open('logging/morrisons_innerHtml.txt', 'w', encoding='utf-8')
+
+        soup2 = BeautifulSoup(innerHTML, "lxml")
+        print(soup2.prettify(), file=morrisons_innerHtml)
+
+
+        food_div2 = soup2.find_all("li", class_="fops-item--cluster")
+
+        # variables
+        names = []
+        prices = []
+        redirects = []
+
+        names2 = []
+
+
+        # log for checking w/e
+
+        morrisons_log = open('logging/morrisons_log.txt', 'w', encoding='utf-8')
+
+        # continues to search till no more next pages
         while True:
 
 
